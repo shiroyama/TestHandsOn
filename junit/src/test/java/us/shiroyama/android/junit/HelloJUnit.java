@@ -16,11 +16,12 @@ public class HelloJUnit {
     @Test
     public void 文字列が同じであることを検証() throws Exception {
         String expected = "hello assertion";
-        // TODO 実装してみよう
+        Assert.assertEquals(expected, "hello assertion");
     }
 
     @Test
     public void assertTrueメソッドを使って何か真偽値を検証してみよう() throws Exception {
-        // TODO 実装してみよう
+        int expected =  3 + 4;
+        Assert.assertTrue(expected == 7);
     }
 }
