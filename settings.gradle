@@ -1,1 +1,1 @@
-include ':app', ':junit', ':common', ':mockito'
+include ':app', ':junit', ':common', ':mockito', ':dagger2'
