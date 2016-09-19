@@ -11,6 +11,12 @@ public class MockUserRepository implements UserRepository {
     @Nullable
     @Override
     public User findById(long id) {
+        try {
+            // Imitates long-running task
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (id == 1) {
             return new User(id, "shiroyama", "fu.shiroyama@gmail.com");
         }
@@ -19,6 +25,12 @@ public class MockUserRepository implements UserRepository {
 
     @Override
     public boolean save(User user) {
+        try {
+            // Imitates long-running task
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (user.getId() == 1) {
             return true;
         }
