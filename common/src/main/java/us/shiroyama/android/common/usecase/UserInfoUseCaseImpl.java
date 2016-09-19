@@ -17,30 +17,40 @@ public class UserInfoUseCaseImpl implements UserInfoUseCase {
     }
 
     @Override
-    public void findById(long id, UserFetchSuccess onSuccess, UserFetchFailure onFailure) {
-        try {
-            User user = userRepository.findById(id);
-            if (user == null) {
-                onFailure.onFailure(new UserNotFoundException("no such user"));
-                return;
+    public void findById(final long id, final UserFetchSuccess onSuccess, final UserFetchFailure onFailure) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    User user = userRepository.findById(id);
+                    if (user == null) {
+                        onFailure.onFailure(new UserNotFoundException("no such user"));
+                        return;
+                    }
+                    onSuccess.onSuccess(user);
+                } catch (Exception e) {
+                    onFailure.onFailure(e);
+                }
             }
-            onSuccess.onSuccess(user);
-        } catch (Exception e) {
-            onFailure.onFailure(e);
-        }
+        }).start();
     }
 
     @Override
-    public void save(@NonNull User user, UserSaveSuccess onSuccess, UserSaveFailure onFailure) {
-        try {
-            boolean isSuccessful = userRepository.save(user);
-            if (isSuccessful) {
-                onSuccess.onSuccess(isSuccessful);
-                return;
+    public void save(@NonNull final User user, final UserSaveSuccess onSuccess, final UserSaveFailure onFailure) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    boolean isSuccessful = userRepository.save(user);
+                    if (isSuccessful) {
+                        onSuccess.onSuccess(isSuccessful);
+                        return;
+                    }
+                    onFailure.onFailure(new IllegalStateException("Failed to save user"));
+                } catch (Exception e) {
+                    onFailure.onFailure(e);
+                }
             }
-            onFailure.onFailure(new IllegalStateException("Failed to save user"));
-        } catch (Exception e) {
-            onFailure.onFailure(e);
-        }
+        }).start();
     }
 }
